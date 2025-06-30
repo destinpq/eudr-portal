@@ -1,0 +1,125 @@
+GEOJSON VALIDATION RULES AND LOGIC
+=================================
+
+ROOT LEVEL VALIDATION
+-----------------------
+Valid Object
+- Logic: Check if input exists and is an object
+- Error: "GeoJSON must be a valid object"
+
+FeatureCollection Type
+- Logic: Check if root type is exactly "FeatureCollection"
+- Error: "Root type must be 'FeatureCollection'"
+
+Features Array
+- Logic: Check if features property exists and is a non-empty array
+- Error: "'features' must be a non-empty array"
+
+FEATURE LEVEL VALIDATION
+--------------------------
+Feature Type
+- Logic: Each feature must have type "Feature"
+- Error: "Feature {index}: Type must be 'Feature'"
+
+Properties Object
+- Logic: Properties must exist and be either an object or null
+- Error: "Feature {index}: 'properties' must be an object or null"
+
+Required Properties
+- Logic: Must contain these required properties:
+  * plot_ID
+  * farmer_name
+- Error: "Feature {index}: Missing required property '{property}'"
+
+Property Types
+- Logic: If area property exists, it must be a number
+- Error: "Feature {index}: 'area' property must be a number"
+
+Area Limit Validation
+- Logic: Area limits based on geometry type:
+  * Point geometries: Maximum 4 units
+  * Polygon geometries: Maximum 50 units
+- Error: "Feature {index}: Area {value} exceeds maximum allowed limit of {limit} units (for {geometry_type} geometries)"
+
+GEOMETRY VALIDATION
+---------------------
+Valid Geometry Types
+- Logic: Check if geometry type is one of:
+  * Point
+  * LineString
+  * Polygon
+  * MultiPoint
+  * MultiLineString
+  * MultiPolygon
+  * GeometryCollection
+- Error: "Feature {index}: Invalid geometry type"
+
+Supported Geometry Types
+- Logic: Only Point and Polygon geometries are allowed
+- Error: "Feature {index}: Only Polygon and Point geometries are supported"
+
+Coordinates Structure
+- Logic: Coordinates must be an array
+- Error: "Feature {index}: Coordinates must be an array"
+
+POLYGON VALIDATION
+--------------------
+No Interior Rings
+- Logic: Polygon must not have holes (interior rings)
+- Error: "Feature {index}: Interior rings (holes) are not allowed"
+
+RING VALIDATION
+-----------------
+Ring Array
+- Logic: Ring must be an array of positions
+- Error: "Feature {index}: Ring must be an array of positions"
+
+Minimum Points
+- Logic: Ring must have at least 4 points
+- Error: "Feature {index}: Ring must have at least 4 points"
+
+Ring Closure
+- Logic: First and last points must be identical (closed ring)
+- Error: "Feature {index}: Ring must be closed (first/last points identical)"
+
+COORDINATE VALIDATION
+-----------------------
+Coordinate Format
+- Logic: Must be [lon, lat] or [lon, lat, alt]
+- Error: "Feature {index} Point {pointIndex}: Invalid coordinate format"
+
+Longitude Range
+- Logic: Must be between -180 and 180
+- Error: "Feature {index} Point {pointIndex}: Invalid longitude {value}"
+
+Latitude Range
+- Logic: Must be between -90 and 90
+- Error: "Feature {index} Point {pointIndex}: Invalid latitude {value}"
+
+ADDITIONAL VALIDATIONS
+------------------------
+No Duplicate Points
+- Logic: No consecutive identical points
+- Error: "Feature {index}: Duplicate consecutive points at {index1} and {index2}"
+
+No Zero-Length Edges
+- Logic: No adjacent identical points
+- Error: "Feature {index}: Zero-length edge at points {index1} and {index2}"
+
+No Self-Intersections
+- Logic: Polygon edges must not intersect
+- Error: "Feature {index}: Polygon has self-intersections"
+
+Coordinate Precision
+- Logic: No more than 6 decimal places
+- Error: "Feature {index} Point {pointIndex}: Excessive coordinate precision"
+
+VALIDATION PROCESS
+-----------------
+1. Each rule is checked in sequence
+2. If a rule fails, an error is added to the results
+3. Validation continues to check all rules
+4. Final result includes:
+   - Overall validity
+   - List of all errors
+   - Step-by-step validation log
