@@ -1,0 +1,13 @@
+﻿{
+    "AppServicePlanName":  "customer-portal-plan",
+    "StorageAccountName":  "customerportalstorage",
+    "BackendWebAppName":  "customer-portal-backend",
+    "CreatedAt":  "2025-06-26 12:18:11",
+    "ResourceGroupName":  "customer-portal-rg",
+    "FrontendWebAppName":  "customer-portal-frontend",
+    "FrontendUrl":  "https://customer-portal-frontend.azurewebsites.net",
+    "BackendUrl":  "https://customer-portal-backend.azurewebsites.net",
+    "Location":  "Central India",
+    "StorageConnectionString":  null,
+    "Environment":  "production"
+}
